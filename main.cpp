@@ -1,6 +1,8 @@
+#include "main.h"
 #include <iostream>
 #include <stdlib.h>
 #include <time.h>
+//#include <vector>
 
 using namespace std;
 
@@ -18,6 +20,19 @@ int decideMove(int board[9], int player)
     return (rand() % n +1);
 }
 
+bool checkDiags(int board[], int player)
+{
+    if ((board[0] == board[4]) && (board[4] == board[8]) && (board[8] == player))
+    {
+        return true;
+    }
+    else if ((board[2] == board[4]) && (board[4] == board[6]) && (board[6] == player))
+    {
+        return true;
+    }
+    return false;
+}
+
 bool checkWinner(int board[], int move, int player)
 {
     if (move % 3 == 0)
@@ -30,6 +45,13 @@ bool checkWinner(int board[], int move, int player)
         {
             return true;
         }
+        if (move == 0 || move == 2)
+        {
+            if (checkDiags(board, player))
+            {
+                return true;
+            }
+        }
     }
     else if (move % 3 == 1)
     {
@@ -41,6 +63,13 @@ bool checkWinner(int board[], int move, int player)
         {
             return true;
         }
+        if (move == 4)
+        {
+            if (checkDiags(board, player))
+            {
+                return true;
+            }
+        }
     }
     else if (move % 3 == 2)
     {
@@ -51,6 +80,13 @@ bool checkWinner(int board[], int move, int player)
         if ((board[move] == board[move-1]) && (board[move-1] == board[move-2]) && (board[move-2] == player))
         {
             return true;
+        }
+        if (move == 6 || move == 8)
+        {
+            if (checkDiags(board, player))
+            {
+                return true;
+            }
         }
     }
     return false;
@@ -85,34 +121,63 @@ void printBoard(int board[])
     cout << board[0] << board[1] << board[2] << endl;
     cout << board[3] << board[4] << board[5] << endl;
     cout << board[6] << board[7] << board[8] << endl;
+    cout << endl;
 }
 
 int playGame()
 {
+    int moves;
     int player = rand() % 2 + 1;
     int board[9] = {0};
     cout << "First player: " << player << endl;
     for (int i = 0; i < 9; i++)
     {
-        cout << "Loop: " << i << "Player:  " << player << endl;
         int nthOpen = decideMove(board, player);
-        cout << "Nth open: " << nthOpen << endl;
         if(makeMove(board, nthOpen, player))
         {
             printBoard(board);
             cout << "Winner! Player: " << player << endl;
-            break;
+            moves = i+1;
+            return moves;
         }
         printBoard(board);
         
         player = player % 2 + 1;
     }
+    return moves+1;
 }
+
+void printMoves(vector<int> & moves, int length)
+{
+    cout << "Starting to print array" << endl;
+    for (vector<int>::size_type g = 0; g != moves.size(); g++)
+    {
+        if (g % 10 == 0)
+        {
+            cout << endl;
+        }
+        cout <<  moves[g] << ", ";
+    }
+    cout << endl;
+}
+
 int main()
 {
+    int numGames = 100;
     srand (time(NULL));
-    playGame();
-    cout << "Hello world: " << endl;
+    vector<int> games = vector<int>();
+    int sum = 0;
+    for (int i = 0; i < numGames; i++)
+    {
+        int g = playGame();
+        sum += g;
+        games.push_back(g);
+    }
+
+    cout << "Sum: " << sum << endl;
+    double avg = sum / (numGames * 1.0);
+    cout << "Avg: " << avg << endl;
+    printMoves(games, numGames);
     return 0;
 }
 
