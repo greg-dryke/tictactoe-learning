@@ -1,8 +1,8 @@
 CXXFLAGS=-std=c++11
 
 all:
-	g++ -o play main.cpp
-	./play
+	g++ -o play.out main.cpp
+	./play.out
 
 clangall:
 	clang -std=c++11 -o play main.cpp
@@ -10,4 +10,4 @@ clangall:
 
 
 clean:
-	rm play
+	rm play.out
