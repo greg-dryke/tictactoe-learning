@@ -1,6 +1,7 @@
 #include <vector>
 
 int decideMove(int[], int );
+int makeCannedDecision(int[], int );
 bool checkDiags(int[] , int );
 bool checkWinner(int[], int move, int );
 
